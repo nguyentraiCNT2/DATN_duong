@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Đăng Ký - Pet Shop</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <style>
+    body {
+      background: linear-gradient(to right, #E3F2C1, #F7F6CF);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .register-container {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 600px;
+      border: 2px solid #4CAF50;
+    }
+
+    .register-title {
+      font-weight: bold;
+      color: #2E7D32;
+      text-align: center;
+    }
+
+    .register-logo {
+      width: 80px;
+      display: block;
+      margin: 0 auto 10px;
+    }
+
+    .error-message {
+      color: red;
+      background: #ffebee;
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .register-btn {
+      background: linear-gradient(to right, #4CAF50, #2E7D32);
+      border: none;
+      transition: 0.3s;
+      color: white;
+      width: 100%;
+    }
+
+    .register-btn:hover {
+      background: linear-gradient(to right, #2E7D32, #4CAF50);
+    }
+
+    .form-label {
+      font-weight: bold;
+      color: #3E4D39;
+    }
+
+    .login-link a {
+      color: #4CAF50;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<div class="register-container">
+  <img src="https://cdn-icons-png.flaticon.com/512/616/616554.png" alt="Pet Logo" class="register-logo">
+  <h2 class="register-title">Đăng Ký Tài Khoản</h2>
+
+  <!-- Hiển thị lỗi nếu có -->
+  <div th:if="${error}" class="error-message">
+    <p th:text="${error}"></p>
+  </div>
+
+  <form th:action="@{/register}" method="post">
+    <div class="row">
+      <!-- Cột 1 -->
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label for="fullName" class="form-label">Họ và Tên:</label>
+          <input type="text" class="form-control" id="fullName" name="fullName" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">Email:</label>
+          <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="phone" class="form-label">Số điện thoại:</label>
+          <input type="text" class="form-control" id="phone" name="phone" required>
+        </div>
+      </div>
+
+      <!-- Cột 2 -->
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label for="password" class="form-label">Mật khẩu:</label>
+          <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="address" class="form-label">Địa chỉ:</label>
+          <input type="text" class="form-control" id="address" name="address" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="gender" class="form-label">Giới tính:</label>
+          <select id="gender" name="gender" class="form-select">
+            <option value="Male">Nam</option>
+            <option value="Female">Nữ</option>
+            <option value="Other">Khác</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn register-btn mt-3">Đăng Ký</button>
+  </form>
+
+  <p class="login-link mt-3 text-center">
+    Bạn đã có tài khoản? <a th:href="@{/login}">Đăng nhập ngay</a>
+  </p>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

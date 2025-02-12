@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh Sách dịch vụ</title>
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
+<!-- Include Header -->
+<th:block th:replace="Admin/Layout/header"></th:block>
+
+<!-- Include Navbar -->
+<th:block th:replace="Admin/Layout/navbar"></th:block>
+
+<!--  Content -->
+<div class="container mt-4">
+  <h3 class="mb-3">Quản lý dịch vụ</h3>
+
+  <!-- Bộ lọc -->
+  <form class="row g-3 mb-3" th:object="${service}" th:action="@{/admin/services}" method="get">
+    <div class="col-md-4">
+      <a href="/admin/services/add" class="btn btn-success">Thêm Dịch Vụ</a>
+    </div>
+    <div class="col-md-6">
+      <input type="text" class="form-control" name="keyword" placeholder="Tìm kiếm dịch vụ..." th:value="${param.keyword}">
+    </div>
+    <div class="col-md-2">
+      <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+    </div>
+
+  </form>
+  <!-- Bảng dữ liệu -->
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Tên</th>
+      <th>Mô tả</th>
+      <th>Thời gian (phút)</th>
+      <th>Hành động</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="service, iterStat : ${services}">
+      <td th:text="${iterStat.count}"></td>
+      <td th:text="${service.name}"></td>
+      <td th:text="${service.description}"></td>
+      <td th:text="${service.duration}"></td>
+      <td>
+        <a th:href="@{/admin/services/edit/{id}(id=${service.id})}" class="btn btn-warning btn-sm">Sửa</a>
+        <form th:action="@{/admin/services/delete/{id}(id=${service.id})}" method="post" style="display:inline;">
+          <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- Phân trang -->
+  <nav>
+    <ul class="pagination justify-content-center">
+      <!-- Nút "Trước" -->
+      <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+        <a class="page-link" th:href="@{/admin/services(page=${currentPage - 1})}">«</a>
+      </li>
+
+      <!-- Danh sách số trang -->
+      <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+          th:classappend="${i == currentPage} ? 'active'">
+        <a class="page-link" th:href="@{/admin/services(page=${i})}" th:text="${i + 1}"></a>
+      </li>
+
+      <!-- Nút "Sau" -->
+      <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+        <a class="page-link" th:href="@{/admin/services(page=${currentPage + 1})}">»</a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+</body>
+</html>
