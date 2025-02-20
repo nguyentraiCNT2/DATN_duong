@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -28,6 +31,13 @@ public class PetEntity {
     private String healthNotes;
     @Column(columnDefinition = "NVARCHAR(255)")
     private String vaccinationStatus;
+    @Lob
+    @Column(name = "image", columnDefinition = "VARBINARY(MAX)")
+    private byte[] image;
+    private BigDecimal price;
+    private Timestamp createAt;
+    private Timestamp updateAt;
+    private Timestamp deleteAt;
 
     public Long getId() {
         return id;
@@ -91,5 +101,45 @@ public class PetEntity {
 
     public void setVaccinationStatus(String vaccinationStatus) {
         this.vaccinationStatus = vaccinationStatus;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    public Timestamp getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(Timestamp createAt) {
+        this.createAt = createAt;
+    }
+
+    public Timestamp getUpdateAt() {
+        return updateAt;
+    }
+
+    public void setUpdateAt(Timestamp updateAt) {
+        this.updateAt = updateAt;
+    }
+
+    public Timestamp getDeleteAt() {
+        return deleteAt;
+    }
+
+    public void setDeleteAt(Timestamp deleteAt) {
+        this.deleteAt = deleteAt;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 }

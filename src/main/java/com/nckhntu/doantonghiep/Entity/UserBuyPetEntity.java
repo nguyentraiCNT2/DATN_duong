@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 @Getter
 @Setter
@@ -24,7 +25,7 @@ public class UserBuyPetEntity {
     @JoinColumn(name = "petId")
     private PetEntity pet;
     private int quantity;
-    private int price;
+    private BigDecimal price;
     @ManyToOne
     @JoinColumn(name = "staff")
     private UserEntity staff;
@@ -62,11 +63,11 @@ public class UserBuyPetEntity {
         this.quantity = quantity;
     }
 
-    public int getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

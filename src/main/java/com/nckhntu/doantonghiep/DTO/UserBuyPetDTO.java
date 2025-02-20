@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 @Getter
 @Setter
@@ -15,7 +16,7 @@ public class UserBuyPetDTO {
     private UserDTO user;
     private PetDTO pet;
     private int quantity;
-    private int price;
+    private BigDecimal price;
     private UserDTO staff;
     private Timestamp buyDate;
 
@@ -51,11 +52,11 @@ public class UserBuyPetDTO {
         this.quantity = quantity;
     }
 
-    public int getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

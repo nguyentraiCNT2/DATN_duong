@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.Base64;
 
 @Getter
 @Setter
@@ -17,7 +18,8 @@ public class ServiceDTO {
     private String description;
     private int duration;
     private Timestamp deleteAt;
-
+    private byte[] image;
+    private String imageBase64;
     public Long getId() {
         return id;
     }
@@ -56,5 +58,21 @@ public class ServiceDTO {
 
     public void setDeleteAt(Timestamp deleteAt) {
         this.deleteAt = deleteAt;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    public String getImageBase64() {
+        return imageBase64;
+    }
+
+    public void setImageBase64(String imageBase64) {
+        this.imageBase64 = imageBase64;
     }
 }

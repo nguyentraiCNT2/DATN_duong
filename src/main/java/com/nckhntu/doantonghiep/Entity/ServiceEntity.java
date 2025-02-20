@@ -24,6 +24,9 @@ public class ServiceEntity {
     private String description;
     private int duration;
     private Timestamp deleteAt;
+    @Lob
+    @Column(name = "image", columnDefinition = "VARBINARY(MAX)")
+    private byte[] image;
     public Long getId() {
         return id;
     }
@@ -62,5 +65,13 @@ public class ServiceEntity {
 
     public void setDeleteAt(Timestamp deleteAt) {
         this.deleteAt = deleteAt;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 }

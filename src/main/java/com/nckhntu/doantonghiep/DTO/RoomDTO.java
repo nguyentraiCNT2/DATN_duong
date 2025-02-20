@@ -13,7 +13,6 @@ import java.sql.Timestamp;
 public class RoomDTO {
     private Long id;
     private UserDTO customer;
-    private UserDTO admin;
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
@@ -31,14 +30,6 @@ public class RoomDTO {
 
     public void setCustomer(UserDTO customer) {
         this.customer = customer;
-    }
-
-    public UserDTO getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(UserDTO admin) {
-        this.admin = admin;
     }
 
     public Timestamp getCreatedAt() {

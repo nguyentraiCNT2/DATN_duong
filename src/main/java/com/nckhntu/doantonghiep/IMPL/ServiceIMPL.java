@@ -14,11 +14,15 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ServiceIMPL implements ServiceService {
@@ -34,86 +38,83 @@ public class ServiceIMPL implements ServiceService {
         this.userRepository = userRepository;
     }
 
-    @Override
-    public Page<ServiceDTO> getAllService(Pageable pageable) {
-        try {
-            Page<ServiceEntity> entities = serviceRepository.findAll(pageable);
-                // Lọc danh sách không có deleteAt
-            List<ServiceDTO> dtoList = entities.stream()
-                    .filter(entity -> entity.getDeleteAt() == null)
-                    .map(entity -> modelMapper.map(entity, ServiceDTO.class))
-                    .toList();
-//            String email = SecurityContextHolder.getContext().getAuthentication().getName();
-//            UserEntity user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
-//
-//            LogEntity log = new LogEntity();
-//            log.setUserId(user);
-//            log.setAction("Người dùng "+user.getFullName()+" với email là "+user.getEmail()+" đã truy cập vào trang danh sách dịch vụ!");
-//            log.setCreatedAt(Timestamp.from(Instant.now()));
-//            logRepository.save(log);
-            return new PageImpl<>(dtoList, pageable, dtoList.size());
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
+
 
     @Override
     public ServiceDTO getServiceById(Long id) {
         try {
             ServiceEntity serviceEntity = serviceRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy dịch dụ nào tương tự"));
             ServiceDTO dto = modelMapper.map(serviceEntity, ServiceDTO.class);
-            String email = SecurityContextHolder.getContext().getAuthentication().getName();
-//            UserEntity user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
-//
-//            LogEntity log = new LogEntity();
-//            log.setUserId(user);
-//            log.setAction("Người dùng "+user.getFullName()+" với email là "+user.getEmail()+" đã xem chi tiết thông tin dịch vụ "+serviceEntity.getName());
-//            log.setCreatedAt(Timestamp.from(Instant.now()));
-//            logRepository.save(log);
+            dto.setImage(null);
+
+            dto.setImageBase64(serviceEntity.getImage() != null ? "/image/service/" + serviceEntity.getId() : null);
+
             return dto;
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
     }
+    @Override
+    public Page<ServiceDTO> getAllService(Pageable pageable) {
+        Page<ServiceEntity> entities = serviceRepository.findAll(pageable);
+        List<ServiceDTO> dtoList = entities.stream()
+                .filter(entity -> entity.getDeleteAt() == null)
+                .map(entity -> {
+                    ServiceDTO dto = modelMapper.map(entity, ServiceDTO.class);
+                    dto.setImage(null);
+
+                    dto.setImageBase64(entity.getImage() != null ? "/image/service/" + entity.getId() : null);
+                    return dto;
+                })
+                .collect(Collectors.toList());
+        return new PageImpl<>(dtoList, pageable, entities.getTotalElements());
+    }
 
     @Override
-    public ServiceDTO addService(ServiceDTO serviceDTO) {
+    public List<ServiceDTO> getAllService() {
+        List<ServiceEntity> entities = serviceRepository.findAll();
+        List<ServiceDTO> dtoList = entities.stream()
+                .filter(entity -> entity.getDeleteAt() == null)
+                .map(entity -> {
+                    ServiceDTO dto = modelMapper.map(entity, ServiceDTO.class);
+                    dto.setImage(null);
+
+                    dto.setImageBase64(entity.getImage() != null ? "/image/service/" + entity.getId() : null);
+                    return dto;
+                })
+                .collect(Collectors.toList());
+        return dtoList;
+    }
+
+    @Override
+    public ServiceDTO addService(ServiceDTO serviceDTO, MultipartFile imageFile) {
         try {
-            boolean isMatchName = serviceRepository.existsByNameAndDeleteAtIsNull(serviceDTO.getName());
-            if (isMatchName) {
-                throw new RuntimeException("Dịch vụ này đã tồn tại.");
-            }
             ServiceEntity serviceEntity = modelMapper.map(serviceDTO, ServiceEntity.class);
+            if (imageFile != null && !imageFile.isEmpty()) {
+                serviceEntity.setImage(imageFile.getBytes());
+            }
             serviceEntity = serviceRepository.save(serviceEntity);
-            String email = SecurityContextHolder.getContext().getAuthentication().getName();
-//            UserEntity user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
-//
-//            LogEntity log = new LogEntity();
-//            log.setUserId(user);
-//            log.setAction("Người dùng "+user.getFullName()+" với email là "+user.getEmail()+" đã thêm mới dịch vụ "+serviceEntity.getName());
-//            log.setCreatedAt(Timestamp.from(Instant.now()));
-//            logRepository.save(log);
             return modelMapper.map(serviceEntity, ServiceDTO.class);
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+        } catch (IOException e) {
+            throw new RuntimeException("Lỗi khi xử lý ảnh: " + e.getMessage());
         }
     }
 
     @Override
-    public ServiceDTO updateService(ServiceDTO serviceDTO) {
+    public ServiceDTO updateService(ServiceDTO serviceDTO, MultipartFile imageFile) {
         try {
-            ServiceEntity serviceEntity = serviceRepository.findById(serviceDTO.getId()).orElseThrow(() -> new RuntimeException("Không tìm thấy dịch vụ nào tương tự"));
-            boolean isMatchName = serviceRepository.existsByNameAndDeleteAtIsNull(serviceDTO.getName());
-            if (isMatchName) {
-                throw new RuntimeException("Dịch vụ này đã tồn tại.");
-            }
+            ServiceEntity serviceEntity = serviceRepository.findById(serviceDTO.getId())
+                    .orElseThrow(() -> new RuntimeException("Không tìm thấy dịch vụ"));
             serviceEntity.setName(serviceDTO.getName());
             serviceEntity.setDescription(serviceDTO.getDescription());
             serviceEntity.setDuration(serviceDTO.getDuration());
+            if (imageFile != null && !imageFile.isEmpty()) {
+                serviceEntity.setImage(imageFile.getBytes());
+            }
             serviceRepository.save(serviceEntity);
             return modelMapper.map(serviceEntity, ServiceDTO.class);
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+        } catch (IOException e) {
+            throw new RuntimeException("Lỗi khi cập nhật ảnh: " + e.getMessage());
         }
     }
 

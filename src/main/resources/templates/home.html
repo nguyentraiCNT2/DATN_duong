@@ -1,10 +1,242 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Trang Chủ - Pet Shop</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+
+    <!-- Custom CSS -->
+    <style>
+        /* Slide */
+        .slide {
+            margin-top: 0px;
+        }
+
+        .carousel-item img {
+            height: 100vh;
+            object-fit: cover;
+        }
+
+        /* Dịch vụ và thú cưng */
+        .services, .pets {
+            margin-top: 30px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .service-item{
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.1);
+            border-radius: 30px !important;
+        }
+        .service-item, .pet-item {
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            padding: 10px;
+            border-radius: 3px;
+            border-bottom: 5px solid  #ffffff;
+
+        }
+.pet-item:hover{
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.1);
+            border-bottom: 5px solid  #8B0000;
+        }
+
+        .service-item img, .pet-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .swiper-button-next, .swiper-button-prev {
+            background-color: rgba(255, 255, 255, 0.75);
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            width: 50px !important;
+            height: 50px !important;
+            padding: 10px !important;
+        }
+        /* Các Tỉnh Thành Nổi Bật - Parallax */
+        .locations {
+            position: relative;
+            background: url('https://bentrelogistics.com/wp-content/uploads/2024/02/tuoi-tho-cua-cho-o-viet-nam.jpg') no-repeat center;
+            background-size: cover;
+            background-attachment: fixed;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .locations::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Lớp màu đen trong suốt */
+            z-index: -1;
+        }
+
+        .order-button{
+            width: 100%;
+            padding: 10px;
+
+        }
+        /* Giới thiệu */
+        .about {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .about-title{
+            font-weight: bold;
+            color: #8B0000;
+            font-size: 44px;
+        }
+        .about-title-group{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
+            align-items: center;
+
+        }
+        .img-about-title{
+            width: 40%;
+
+            border-radius: 20px;
+        }
+    </style>
 </head>
 <body>
-trang chu xin chào quý khách
+
+<!-- Include Header -->
+<th:block th:replace="Layout/Header"></th:block>
+
+<!-- Include Navbar -->
+
+<!-- Slide -->
+<section class="slide">
+    <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="https://cdn.mobilecity.vn/mobilecity-vn/images/2021/12/tong-hop-meo-giup-ban-chup-nhung-buc-anh-dep-hon-ve-thu-cung-cua-minh.jpg.webp" class="d-block w-100" alt="Slide 1">
+            </div>
+            <div class="carousel-item">
+                <img src="https://gcs.tripi.vn/public-tripi/tripi-feed/img/474091jkR/hinh-anh-thu-cung-cute-tuyet-dep_013757583.jpg" class="d-block w-100" alt="Slide 2">
+            </div>
+            <div class="carousel-item">
+                <img src="https://i.pinimg.com/550x/c3/ce/ef/c3ceef96087eaba7b3c649295dc4dbe9.jpg" class="d-block w-100" alt="Slide 3">
+            </div>
+            <div class="carousel-item">
+                <img src="https://cutepetshop.vn/wp-content/uploads/2023/05/ec02ec4be1b374b2aebe588be25b8bc6.jpg" class="d-block w-100" alt="Slide 4">
+            </div>
+            <div class="carousel-item">
+                <img src="https://png.pngtree.com/background/20211216/original/pngtree-animals-dogs-cute-pets-pet-puppy-pictures-picture-image_1522444.jpg" class="d-block w-100" alt="Slide 5">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</section>
+<!-- Giới thiệu -->
+<section class="about">
+    <div class="about-title-group">
+        <h2 class="about-title">Những Người Bạn Đồng Hành Tuyệt Vời</h2>
+        <p>Thú cưng là những người bạn trung thành, mang lại niềm vui và sự gắn kết cho con người.</p>
+    </div>
+    <img src="https://vinalines.net/wp-content/uploads/2024/07/5-thu-cung-tuyet-voi-cho-khong-_771658650135.jpg" alt="img-tile" class="img-about-title">
+</section>
+
+<!-- Các Tỉnh Thành Nổi Bật (Parallax) -->
+<section class="locations">
+    <h2>Các giống thú cưng rất đa dạng </h2>
+    <p>Golden Retriever, Labrador, Poodle, Husky, Chihuahua - mèo Anh lông ngắn, Ba Tư,...</p>
+
+</section>
+<!-- Danh sách dịch vụ -->
+<section class="services">
+    <div class="container">
+        <h2 class="section-title">Dịch Vụ</h2>
+        <!-- Swiper -->
+        <div class="swiper mySwiper">
+            <div class="swiper-wrapper"  >
+                <div class="swiper-slide" th:each="service, iterStat : ${services}">
+                    <div class="service-item">
+                        <img th:if="${service.imageBase64}" th:src="${service.imageBase64}"  alt="Dịch Vụ 1">
+                        <br/>
+                        <p th:text="${service.name}"></p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Danh sách thú cưng -->
+<section class="pets">
+    <div class="container">
+        <h2 class="section-title">Thú Cưng</h2>
+        <div class="row">
+            <div class="col-md-3" th:each="pet, iterStat : ${pets}">
+                <div class="pet-item">
+                    <img th:if="${pet.imageBase64}" th:src="${pet.imageBase64}"  alt="Thú Cưng 1">
+                    <h3 th:text="${pet.name}"></h3>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+<th:block th:replace="Layout/Footer"></th:block>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Swiper JS -->
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script>
+    // Khởi tạo carousel tự động chuyển slide mỗi 3 giây
+    const carousel = new bootstrap.Carousel('#carouselExample', {
+        interval: 3000,
+        wrap: true
+    });
+
+    // Khởi tạo Swiper cho danh sách dịch vụ
+    const swiper = new Swiper(".mySwiper", {
+        slidesPerView: 4,
+        spaceBetween: 30,
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+    });
+</script>
 </body>
 </html>

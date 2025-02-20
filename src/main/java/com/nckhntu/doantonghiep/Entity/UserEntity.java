@@ -39,6 +39,9 @@ public class UserEntity implements UserDetails {
     private String role;
     private Timestamp createdAt;
     private Boolean active;
+    @Lob
+    @Column(name = "image", columnDefinition = "VARBINARY(MAX)")
+    private byte[] image;
 
     public Long getId() {
         return id;
@@ -118,6 +121,14 @@ public class UserEntity implements UserDetails {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     @Override

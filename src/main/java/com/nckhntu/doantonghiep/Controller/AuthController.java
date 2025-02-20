@@ -2,6 +2,7 @@ package com.nckhntu.doantonghiep.Controller;
 
 import com.nckhntu.doantonghiep.Config.CustomUserDetailsService;
 import com.nckhntu.doantonghiep.DTO.UserDTO;
+import com.nckhntu.doantonghiep.Request.ResetPasswordRequest;
 import com.nckhntu.doantonghiep.Service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,12 +28,14 @@ public class AuthController {
     private final CustomUserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
+    private final HttpSession httpSession;
 
-    public AuthController(AuthenticationManager authenticationManager, CustomUserDetailsService userDetailsService, PasswordEncoder passwordEncoder, UserService userService) {
+    public AuthController(AuthenticationManager authenticationManager, CustomUserDetailsService userDetailsService, PasswordEncoder passwordEncoder, UserService userService, HttpSession httpSession) {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
+        this.httpSession = httpSession;
     }
 
     @GetMapping("/login")
@@ -46,9 +49,9 @@ public class AuthController {
         try {
         UserDTO user  = userService.login(email, password);
             if (user.getRole().equals("SUPER_ADMIN")) {
-                return "redirect:/superadmin";
+                return "redirect:/admin/dashboard";
             } else if (user.getRole().equals("ADMIN")) {
-                return "redirect:/admin";
+                return "redirect:/admin/dashboard";
             } else {
                 return "redirect:/home";
             }
@@ -57,6 +60,7 @@ public class AuthController {
             return "login";
         }
     }
+
     // Xử lý logout
     @GetMapping("/logout")
     public String logout(HttpSession session) {
@@ -80,5 +84,35 @@ public class AuthController {
             return "register"; // Trả về trang đăng ký nếu có lỗi
         }
         return "register";
+    }
+
+    @GetMapping("/for-get-password")
+    public String forgetPassword(){
+        return "ForgetPassword";
+    }
+    @PostMapping("/for-get-password")
+    public String forgetPassword(@RequestParam("email") String email, Model model) {
+        try {
+            UserDTO userDTO = userService.forgetPassword(email);
+            httpSession.setAttribute("forgetPasswordEmail", userDTO.getEmail());
+            return "redirect:/re-set-password";
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return "ForgetPassword";
+        }
+    }
+    @GetMapping("/re-set-password")
+    public String reSetPassword(){
+      return "ResetPassword";
+    }
+    @PostMapping("/re-set-password")
+    public String reSetPassword(@ModelAttribute ResetPasswordRequest resetPasswordRequest, Model model) {
+        try {
+         userService.resetPassword(resetPasswordRequest.getEmail(), resetPasswordRequest.getNewPassword(), resetPasswordRequest.getConfirmPassword());
+            return "redirect:/login";
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return "ResetPassword";
+        }
     }
 }

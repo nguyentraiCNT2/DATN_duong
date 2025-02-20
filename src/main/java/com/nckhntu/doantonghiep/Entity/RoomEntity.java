@@ -20,9 +20,7 @@ public class RoomEntity {
     @ManyToOne
     @JoinColumn(name = "customer")
     private UserEntity customer;
-    @ManyToOne
-    @JoinColumn(name = "admin")
-    private UserEntity admin;
+
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
@@ -42,13 +40,7 @@ public class RoomEntity {
         this.customer = customer;
     }
 
-    public UserEntity getAdmin() {
-        return admin;
-    }
 
-    public void setAdmin(UserEntity admin) {
-        this.admin = admin;
-    }
 
     public Timestamp getCreatedAt() {
         return createdAt;

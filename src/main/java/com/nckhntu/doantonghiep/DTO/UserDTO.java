@@ -21,7 +21,8 @@
         private String role;
         private Timestamp createdAt;
         private Boolean active;
-
+        private byte[] image;
+        private String imageBase64;
         public Long getId() {
             return id;
         }
@@ -100,5 +101,21 @@
 
         public void setActive(Boolean active) {
             this.active = active;
+        }
+
+        public byte[] getImage() {
+            return image;
+        }
+
+        public void setImage(byte[] image) {
+            this.image = image;
+        }
+
+        public String getImageBase64() {
+            return imageBase64;
+        }
+
+        public void setImageBase64(String imageBase64) {
+            this.imageBase64 = imageBase64;
         }
     }
