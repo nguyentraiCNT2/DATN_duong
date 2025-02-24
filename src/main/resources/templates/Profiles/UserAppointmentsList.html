@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Danh Sách Lịch Hẹn</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background: #f0f2f5;
+            font-family: 'Poppins', sans-serif;
+        }
+        .profile-container {
+            margin-top: 5% !important;
+            max-width: 1000px;
+            margin: 50px auto;
+            background: #fff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        /* Left column: Navigation menu */
+        .nav-buttons {
+            margin-bottom: 20px;
+        }
+        .nav-buttons a {
+            display: block;
+            margin: 10px 0;
+            text-decoration: none;
+        }
+        .profile-container {
+            margin-top: 5% !important;
+            max-width: 1000px;
+            margin: 50px auto;
+            background: #fff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .appointments-container {
+            max-width: 1000px;
+            margin: 50px auto;
+            background: #fff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            max-height: 600px; /* Khi danh sách quá dài, hiển thị thanh cuộn dọc */
+        }
+
+        .appointments-container h3 {
+            color: #8B0000;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .appointment-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: #fff;
+        }
+
+        .appointment-card h5 {
+            color: #8B0000;
+            margin-bottom: 10px;
+        }
+
+        .appointment-card p {
+            color: #555;
+            margin: 5px 0;
+        }
+
+        .pagination {
+            justify-content: center;
+        }
+        /* Left column: Navigation menu */
+        .nav-buttons {
+            margin-bottom: 20px;
+        }
+        .nav-buttons a {
+            display: block;
+            margin: 10px 0;
+            text-decoration: none;
+        }
+        .date-appointment{
+            border: none;
+        }
+        .date-appointment:focus{
+            outline: none;
+        }
+        .appointment-photo{
+            border-radius: 10px;
+            width: 150px !important;
+            height: 150px !important;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+<!-- Include Header & Navbar -->
+<th:block th:replace="Layout/Header"></th:block>
+<div class="profile-container">
+    <div class="row">
+        <!-- Left column: Navigation menu -->
+        <div class="col-md-3">
+            <div class="nav-buttons">
+                <a href="/profile" class="btn btn-primary">
+                    <i class="fas fa-user-edit"></i> thông tin cá nhân
+                </a>
+                <a href="/profile/update" class="btn btn-primary">
+                    <i class="fas fa-user-edit"></i> Thay đổi thông tin
+                </a>
+                <a href="/profile/change-password" class="btn btn-warning">
+                    <i class="fas fa-key"></i> Đổi mật khẩu
+                </a>
+                <a href="/user/appointment/me" class="btn btn-success">
+                    <i class="fas fa-calendar-alt"></i> Danh sách lịch hẹn
+                </a>
+                <a href="/user/buy-pet" class="btn btn-info">
+                    <i class="fas fa-paw"></i> Danh sách thú cưng đã mua
+                </a>
+            </div>
+        </div>
+
+
+        <div class="col-md-9">
+            <div class="appointments-container">
+                <h3>Danh Sách Lịch Hẹn</h3>
+                <!-- Danh sách lịch hẹn hiển thị dưới dạng card -->
+                <div th:if="${#lists.isEmpty(appointments)}" class="text-center">
+                    <p>Chưa có lịch hẹn nào.</p>
+                </div>
+                <div th:each="appointment, iterStat : ${appointments}" class="appointment-card">
+                    <h5>Phiếu hẹn <span th:text="${iterStat.count}"></span></h5>
+                    <p><strong>Ngày hẹn:</strong>
+                        <span>
+        <input type="date" name="" th:value="${appointment.appointmentDate}" class="date-appointment" readonly id="">
+      </span>
+                    </p>
+                    <p><strong>Dịch vụ:</strong> <span th:text="${appointment.serviceId.name}"></span></p>
+                    <p><strong>Trạng thái:</strong> <span th:text="${appointment.status}"></span></p>
+                    <p><strong>Ghi chú:</strong> <span th:text="${appointment.notes}"></span></p>
+                    <p><strong>Tên thú cưng:</strong> <span th:text="${appointment.petId.name}"></span></p>
+                    <p><strong>Ảnh thú cưng:</strong> <span >
+
+                    </span></p>
+                    <img th:src="@{/image/pet/{id}(id=${appointment.petId.id})}" alt="" class="appointment-photo" >
+
+                    <form th:action="@{/user/appointment/cancel/{id}(id=${appointment.id})}" method="post">
+                        <input type="submit" name=""  value="Hủy hẹn" class="btn  btn-warning">
+                    </form>
+                </div>
+
+                <!-- Phân trang -->
+                <nav>
+                    <ul class="pagination">
+                        <li class="page-item" th:if="${currentPage > 0}">
+                            <a class="page-link" th:href="@{/user/appointments(page=${currentPage - 1}, size=${size})}">Trang
+                                trước</a>
+                        </li>
+                        <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                            th:classappend="${i == currentPage} ? 'active'">
+                            <a class="page-link" th:href="@{/user/appointments(page=${i}, size=${size})}"
+                               th:text="${i + 1}"></a>
+                        </li>
+                        <li class="page-item" th:if="${currentPage < totalPages - 1}">
+                            <a class="page-link" th:href="@{/user/appointments(page=${currentPage + 1}, size=${size})}">Trang
+                                sau</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="Layout/Footer"></th:block>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
